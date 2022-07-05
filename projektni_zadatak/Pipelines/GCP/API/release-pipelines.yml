@@ -1,0 +1,52 @@
+trigger:
+  - release/*
+
+variables:
+  - template: variables.yml
+
+name: $(versionBuild)
+
+stages:
+  - template: template-build-stage.yml
+    parameters:
+      stageName: ${{variables.buildStage}}
+      buildConfiguration: '${{variables.buildConfiguration}}'
+      poolName: ${{variables.poolName}}
+      vmImage: ${{variables.vmImage}}
+      projectPathCsproj: ${{variables.projectPathCsproj}}
+      testPathCsproj: ${{variables.testPathCsproj}}
+      zipAfterPublish: true
+      hasDatabaseMigrations: ${{variables.hasDatabaseMigrations}}
+      condition: ne(variables['Build.Reason'], 'PullRequest')
+
+  - template: template-deploy-stage.yml
+    parameters:
+      stageName: ${{variables.testDeployStage}}
+      poolName: ${{variables.poolName}}
+      vmImage: ${{variables.vmImage}}
+      environment: ${{variables.testDeployEnvironment}}
+      azureSubscription: ${{variables.testAzureSubscription}}
+      appType: ${{variables.appType}}
+      appName: ${{variables.testAppName}}
+      packagePath: ${{variables.packagePath}}
+      hasDatabaseMigrations: ${{variables.hasDatabaseMigrations}}
+      sqlServerName: ${{variables.testSqlServerName}}
+      sqlDatabaseName: ${{variables.testSqlDatabaseName}}
+      dependsOn: ['${{variables.buildStage}}']
+      condition: and(succeeded(), startsWith(variables['build.sourceBranch'], 'refs/heads/release/'), ne(variables['testAzureSubscription'], ''))
+
+  - template: template-deploy-stage.yml
+    parameters:
+      stageName: ${{variables.prodDeployStage}}
+      poolName: ${{variables.poolName}}
+      vmImage: ${{variables.vmImage}}
+      environment: ${{variables.prodDeployEnvironment}}
+      azureSubscription: ${{variables.prodAzureSubscription}}
+      appType: ${{variables.appType}}
+      appName: ${{variables.prodAppName}}
+      packagePath: ${{variables.packagePath}}
+      hasDatabaseMigrations: ${{variables.hasDatabaseMigrations}}
+      sqlServerName: ${{variables.prodSqlServerName}}
+      sqlDatabaseName: ${{variables.prodSqlDatabaseName}}
+      dependsOn: ['${{variables.buildStage}}', '${{variables.testDeployStage}}']
+      condition: and(succeeded(), startsWith(variables['build.sourceBranch'], 'refs/heads/release/'), ne(variables['prodAzureSubscription'], ''))

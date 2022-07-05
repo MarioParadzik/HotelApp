@@ -1,0 +1,24 @@
+variables:
+
+  hasDatabaseMigrations: true
+  versionMajor: 0
+  versionMinor: 0
+  versionPatch: 0
+
+  # Version
+  ${{ if startsWith(variables['build.sourceBranch'], 'refs/heads/release/')}}:
+    versionBuild: $[format('{0}.{1}.{2}', variables['versionMajor'], variables['versionMinor'], variables['versionPatch'])]
+
+  ${{ if not(startsWith(variables['build.sourceBranch'], 'refs/heads/release/'))}}:
+    versionBuildId: $[counter(format('{0}.{1}.{2}', variables['versionMajor'], variables['versionMinor'], variables['versionPatch']), 0)]
+    versionBuild: $[format('{0}.{1}.{2}-CI+{3}', variables['versionMajor'], variables['versionMinor'], variables['versionPatch'], variables['versionBuildId'])]
+
+  # Build stage
+  buildConfiguration: 'Release'
+  buildStage: 'Build'
+  containerRegistry: 'gcp-hotel-app'
+  repository: 'student-demo-345708/hotel-app-view'
+  dockerfile: 'HotelApp.View/Dockerfile'
+  poolName: 'Azure Pipelines'
+  vmImage: 'ubuntu-latest'
+

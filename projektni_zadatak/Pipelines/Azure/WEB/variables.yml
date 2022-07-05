@@ -1,0 +1,47 @@
+variables:
+
+  hasDatabaseMigrations: true
+  versionMajor: 0
+  versionMinor: 0
+  versionPatch: 0
+
+  # Version
+  ${{ if startsWith(variables['build.sourceBranch'], 'refs/heads/release/')}}:
+    versionBuild: $[format('{0}.{1}.{2}', variables['versionMajor'], variables['versionMinor'], variables['versionPatch'])]
+
+  ${{ if not(startsWith(variables['build.sourceBranch'], 'refs/heads/release/'))}}:
+    versionBuildId: $[counter(format('{0}.{1}.{2}', variables['versionMajor'], variables['versionMinor'], variables['versionPatch']), 0)]
+    versionBuild: $[format('{0}.{1}.{2}-CI+{3}', variables['versionMajor'], variables['versionMinor'], variables['versionPatch'], variables['versionBuildId'])]
+
+  # Build stage
+  buildConfiguration: 'Release'
+  buildStage: 'Build'
+  projectPathCsproj: 'HotelApp/HotelApp.Web/HotelApp.Web.csproj'
+  poolName: 'Azure pipelines'
+  vmImage: 'windows-2022'
+  testPathCsproj: ''
+  testPathDll: 'Solution/**/bin/$(BuildConfiguration)/net6.0/*.Tests.dll'
+
+  # Deploy stage
+  deployStage: 'DeployArtifact'
+  appType: 'webApp' # FunctionApp type: 'webApp' for windows, 'webAppLinux' for linux
+  packagePath: '$(System.ArtifactsDirectory)/drop/*.zip' # Location of package to publish
+  
+  # DEV
+  devAppName: 'hp-weu-HotelAppWeb-dev-01'
+  devAzureSubscription: 'Azure Portal Service Connection'
+  devDeployEnvironment: 'DEV'
+  
+  # TEST
+  testAppName: '' # FunctionApp name
+  testAzureSubscription: ''
+  testDeployEnvironment: 'TEST'
+  testSqlServerName: ''
+  testSqlDatabaseName: ''
+  
+  #PROD
+  prodAppName: '' # FunctionApp name
+  prodAzureSubscription: ''
+  prodDeployEnvironment: 'PROD'
+  prodSqlServerName: ''
+  prodSqlDatabaseName: ''

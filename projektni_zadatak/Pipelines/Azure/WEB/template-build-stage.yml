@@ -1,0 +1,81 @@
+# parameters values will be passed from the main/parent yaml template.
+parameters:
+  stageName: ''
+  poolName: ''
+  vmImage: ''
+  projectPathCsproj: ''
+  testPathCsproj: ''
+  buildConfiguration: 'Release'
+  zipAfterPublish: false
+  hasDatabaseMigrations: false
+  condition: ''
+  dependsOn: []
+
+stages:
+  - stage: ${{ parameters.stageName }}
+    displayName: ${{ parameters.stageName }} stage
+    dependsOn: ${{ parameters.dependsOn }}
+    condition: ${{ parameters.condition }}
+    pool:
+      name: ${{ parameters.poolName }}
+      vmImage: ${{ parameters.vmImage }}
+      demands: npm
+
+    jobs:
+      - job: Build
+        displayName: 'Restore, Build Solution & Publish Build Artifacts'
+        workspace:
+          clean: all
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '6.0.102'
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet restore'
+            inputs:
+              command: restore
+              projects: |
+                $(projectPathCsproj)
+                # $(testPathCsproj)
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Build test project'
+            condition: and(succeeded(), ne('${{parameters.testPathCsproj}}', ''))
+            inputs:
+              command: 'build'
+              projects: '$(testPathCsproj)'
+              arguments: '--configuration $(buildConfiguration)'
+        
+          - task: DotNetCoreCLI@2
+            displayName: 'Run tests'
+            condition: and(succeeded(), ne('${{parameters.testPathCsproj}}', ''))
+            inputs:
+              command: custom
+              projects: '${{parameters.testPathDll}}'
+              custom: vstest
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'Build the project'
+            inputs:
+              command: 'build'
+              arguments: '--no-restore --configuration $(buildConfiguration)'
+              projects: $(projectPathCsproj)
+              
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish the project'
+            inputs:
+              command: 'publish'
+              projects: $(projectPathCsproj)
+              publishWebProjects: false
+              arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+              zipAfterPublish: ${{parameters.zipAfterPublish}}
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish build artifact'
+            condition: and(succeeded(), eq(${{parameters.zipAfterPublish}}, true))
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'

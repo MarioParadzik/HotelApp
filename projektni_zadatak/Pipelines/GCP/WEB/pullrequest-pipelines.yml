@@ -1,0 +1,19 @@
+trigger: none
+
+variables:
+  - template: variables.yml
+
+name: PR_$(date:yyyyMMdd)$(rev:.r)
+
+stages:
+  - template: template-build-stage.yml
+    parameters:
+      stageName: ${{variables.buildStage}}
+      buildConfiguration: '${{variables.buildConfiguration}}'
+      poolName: ${{variables.poolName}}
+      vmImage: ${{variables.vmImage}}
+      projectPathCsproj: ${{variables.projectPathCsproj}}
+      zipAfterPublish: false
+      testPathCsproj: ${{variables.testPathCsproj}}
+      hasDatabaseMigrations: false
+      condition: ne(variables['Build.Reason'], 'PullRequest')

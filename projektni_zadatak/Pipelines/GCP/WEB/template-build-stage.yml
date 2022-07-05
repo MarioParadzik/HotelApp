@@ -1,0 +1,30 @@
+# parameters values will be passed from the main/parent yaml template.
+parameters:
+  stageName: ''
+  vmImage: 'ubuntu-latest'
+  containerRegistry: 'gcp-hotel-app'
+  repository: 'student-demo-345708/hotel-app-view'
+  dockerfile: 'HotelApp.View/Dockerfile'
+  condition: ''
+  dependsOn: []
+
+stages:
+- stage: ${{ parameters.stageName }}
+  displayName: ${{ parameters.stageName }} stage
+  dependsOn: ${{ parameters.dependsOn }}
+  condition: ${{ parameters.condition }}
+  
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: ${{ parameters.containerRegistry }}
+        repository: ${{ parameters.repository }}
+        command: 'buildAndPush'
+        Dockerfile: ${{ parameters.dockerfile }}
+        tags: '$(Build.BuildId)'
