@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - HotelApp
+
+variables:
+  - template: variables.yml
+
+name: ${{variables.versionBuild}}
+
+stages:
+  - template: template-build-stage.yml
+    parameters:
+      stageName: ${{variables.buildStage}}
+      buildConfiguration: '${{variables.buildConfiguration}}'
+      poolName: ${{variables.poolName}}
+      vmImage: ${{variables.vmImage}}
+      projectPathCsproj: ${{variables.projectPathCsproj}}
+      testPathCsproj: ${{variables.testPathCsproj}}
+      zipAfterPublish: true
+      hasDatabaseMigrations: ${{variables.hasDatabaseMigrations}}
+      condition: ne(variables['Build.Reason'], 'PullRequest')
+
+  - template: template-deploy-stage.yml
+    parameters:
+      stageName: ${{variables.deployStage}}
+      poolName: ${{variables.poolName}}
+      vmImage: ${{variables.vmImage}}
+      environment: ${{variables.devDeployEnvironment}}
+      azureSubscription: ${{variables.devAzureSubscription}}
+      appType: ${{variables.appType}}
+      appName: ${{variables.devAppName}}
+      packagePath: ${{variables.packagePath}}
+      sqlServerName: ${{variables.devSqlServerName}}
+      sqlDatabaseName: ${{variables.devSqlDatabaseName}}
+      dependsOn: ['${{variables.buildStage}}']
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), ne(variables['devAzureSubscription'], ''))

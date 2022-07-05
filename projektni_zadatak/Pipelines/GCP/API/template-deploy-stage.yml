@@ -1,0 +1,61 @@
+# parameters values will be passed from the main/parent yaml template.
+parameters:
+  stageName: ''
+  poolName: ''
+  vmImage: ''
+  environment: ''
+  azureSubscription: ''
+  appType: 'webApp'
+  appName: ''
+  packagePath: ''
+  sqlServerName: ''
+  sqlDatabaseName: ''
+  dependsOn: []
+  condition: 'succeeded()'
+
+stages:
+  - stage: ${{ parameters.stageName }}
+    displayName: Deploy stage - ${{ parameters.environment }}
+    dependsOn: ${{ parameters.dependsOn }}
+    condition: ${{ parameters.condition }}
+    jobs:
+      - deployment: DeployWebApp
+        displayName: 'Deploy Web app'
+        pool:
+          name: ${{ parameters.poolName }}
+          vmImage: ${{ parameters.vmImage }}
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: none
+                - download: none
+
+                - task: DownloadBuildArtifacts@0
+                  displayName: 'Download build artifact'
+                  inputs:
+                    buildType: 'current'
+                    downloadType: 'single'
+                    artifactName: 'drop'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: ${{parameters.azureSubscription}}
+                    appType:  ${{parameters.appType}}
+                    WebAppName: ${{parameters.appName}}
+                    packageForLinux: ${{parameters.packagePath}}
+
+                - task: SqlAzureDacpacDeployment@1
+                  displayName: 'Migrate database'
+                  condition: and(succeeded(), ne('${{parameters.sqlServerName}}', ''))
+                  inputs:
+                    azureSubscription: ${{parameters.azureSubscription}}
+                    AuthenticationType: 'servicePrincipal'
+                    ServerName: ${{parameters.sqlServerName}}
+                    DatabaseName: ${{parameters.sqlDatabaseName}}
+                    deployType: 'SqlTask'
+                    SqlFile: '$(System.ArtifactsDirectory)/drop/Migration-Script.sql'
+                    IpDetectionMethod: 'AutoDetect'

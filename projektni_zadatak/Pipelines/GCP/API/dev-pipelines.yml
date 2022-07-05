@@ -1,0 +1,22 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - HotelApp
+
+variables:
+  - template: variables.yml
+
+name: ${{variables.versionBuild}}
+
+stages:
+  - template: template-build-stage.yml
+    parameters:
+      stageName: ${{variables.buildStage}}
+      vmImage: ${{variables.vmImage}}
+      containerRegistry: ${{variables.containerRegistry}}
+      repository: ${{variables.repository}}
+      dockerfile: ${{variables.dockerfile}}
+      condition: ${{variables.condition}}

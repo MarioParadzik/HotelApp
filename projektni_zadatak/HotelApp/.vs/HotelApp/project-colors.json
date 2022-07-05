@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "3ebe08ee-2cf9-420f-8c90-147c536a7ca0": {
+      "ProjectGuid": "3ebe08ee-2cf9-420f-8c90-147c536a7ca0",
+      "DisplayName": "HotelApp.Api",
+      "ColorIndex": 0
+    },
+    "406b8296-e913-4a20-bb28-b2b6c7e4eb54": {
+      "ProjectGuid": "406b8296-e913-4a20-bb28-b2b6c7e4eb54",
+      "DisplayName": "HotelAppMySQL.Migrations",
+      "ColorIndex": 1
+    },
+    "636ee43e-d714-4692-892a-bba52d5af4c6": {
+      "ProjectGuid": "636ee43e-d714-4692-892a-bba52d5af4c6",
+      "DisplayName": "HotelAppMSSQL.Migrations",
+      "ColorIndex": 2
+    },
+    "6a205547-387c-4ead-a7f5-76daa742b7f0": {
+      "ProjectGuid": "6a205547-387c-4ead-a7f5-76daa742b7f0",
+      "DisplayName": "HotelApp.Web",
+      "ColorIndex": 3
+    }
+  },
+  "NextColorIndex": 4
+}

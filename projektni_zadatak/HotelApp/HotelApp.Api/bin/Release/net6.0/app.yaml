@@ -1,0 +1,18 @@
+﻿runtime: custom
+env: flex
+service: gcp-hotel-app-api-dev-01
+
+# This sample incurs costs to run on the App Engine flexible environment. 
+# The settings below are to reduce costs during testing and are not appropriate
+# for production use. For more information, see:
+# https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
+
+env_variables:
+  Provider: "MySQL"
+  ConnectionStrings__MySQL: "Uid=root;Pwd=#Ni+9SjzD1P$fejI;Host=34.78.21.156;Database=gcp-db-mysql-hotel-app-dev-01;"
