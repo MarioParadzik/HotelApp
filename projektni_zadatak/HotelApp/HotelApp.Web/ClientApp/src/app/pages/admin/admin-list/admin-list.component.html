@@ -1,0 +1,67 @@
+<div class="text-style">Administrators List</div>
+    
+<div class="reservation-table" *ngIf="adminList$ | async as admins">
+    <div style="margin-bottom: 8px; margin-left: 20px;">
+        <button nz-button (click)="showModal()">Add administrator</button>
+        <nz-modal [(nzVisible)]="isVisible" nzTitle="Add Administrator" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+            <ng-container *nzModalContent>
+                <form nz-form [formGroup]="validateForm">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6"  [nzXs]="24" nzFor="firstName" nzRequired ><span>First Name</span></nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your first name!">
+                          <input nz-input id="firstName" formControlName="firstName" />
+                        </nz-form-control>
+                      </nz-form-item>
+
+                      <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName" nzRequired ><span>Last Name</span></nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your last name!">
+                          <input nz-input id="lastName" formControlName="lastName" />
+                        </nz-form-control>
+                      </nz-form-item>
+    
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+                          <input nz-input formControlName="email" id="email" />
+                        </nz-form-control>
+                      </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Password</nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="err">
+                          <input nz-input type="password" id="password" formControlName="password"/>
+                          <ng-template #err let-control>
+                            <ng-container *ngIf="control.hasError('required')">Please input your password!</ng-container>
+                            <ng-container *ngIf="control.hasError('minlength') && control.hasError('pattern')">Password needs to be 8 characters long! </ng-container>
+                            <ng-container *ngIf="control.hasError('pattern') && !control.hasError('minlength')">Password needs to have upper and lowercase characters, numbers and special characters! </ng-container>
+                          </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </ng-container>
+          </nz-modal>
+    </div>
+    <nz-list-empty *ngIf="admins?.length == 0"></nz-list-empty>
+
+    <div *ngIf="admins?.length != 0">
+        <nz-list nzItemLayout="horizontal" nzSize="large">
+            <nz-list-item *ngFor="let admin of admins">
+              <nz-list-item-meta
+                nzAvatar="assets/Images/admin.png"
+                nzDescription="Name: {{admin.firstName}} {{admin.lastName}}"
+              >
+                <nz-list-item-meta-title>
+                  <a class="link-primary" nz-popconfirm
+                  nzPopconfirmTitle="Are you sure you want to delete {{admin.firstName + ' ' + admin.lastName}}"
+                  nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="deleteadministrator(admin.id)"> Delete</a>
+                </nz-list-item-meta-title>
+              </nz-list-item-meta>
+            </nz-list-item>
+          </nz-list>
+    </div>
+    
+
+</div>
+    

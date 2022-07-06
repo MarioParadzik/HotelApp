@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+.text-style{
+    font-size: 30px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin: 2vh;
+  }
+
+.date{
+  margin-top: 15px;
+}
+
+.text-box{
+  margin-top: 3vh;
+  width: 15vw;
+}
+
+.note-stlye{
+  font-size: 15px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.info-style {
+  display: flex;
+  width: 20vw;
+  padding: 5px;
+  margin-top: 1vh;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+  color: #D8000C;
+  background-color: #FFBABA;
+}

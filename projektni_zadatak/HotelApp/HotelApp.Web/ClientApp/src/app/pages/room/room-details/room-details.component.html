@@ -1,0 +1,67 @@
+<div class="text-style">Reserve Information</div>
+
+<div nz-row>
+    <div nz-col nzSpan="12">
+        <div *ngIf="room$ | async as room" style="margin-left: 1vw;">
+            <div class="info-style"> 
+                <div class="column"><i class="bi bi-info-circle"></i> Name:</div> 
+                <div class="column" >{{ room.name }}</div>  
+            </div>
+            <div class="info-style"> 
+                <div class="column"><i class="bi bi-info-circle"></i> Number of beds:</div> 
+                <div class="column" >{{ room.numberOfBeds }}</div>  
+            </div>
+            <div class="info-style"> 
+               <div class="column"> <i class="bi bi-info-circle"></i> Price per night:</div> 
+                <div class="column" >{{ room.price }}</div>  
+            </div>
+            <div class="info-style"> 
+                <div class="column"><i class="bi bi-info-circle"></i> Hotel:</div> 
+                <div class="column" >{{ room.hotelName }}</div>  
+            </div>
+            <div class="info-style"> 
+                <div class="column"><i class="bi bi-info-circle"></i> Adress:</div> 
+                <div class="column" >{{ room.adress }}</div>  
+            </div>
+            <div class="info-style">
+                <div class="column"><i class="bi bi-info-circle"></i> Location:</div> 
+                <div class="column">{{ room.locationName }}</div>
+            </div>
+            <div class="info-style">
+                <div class="column"><i class="bi bi-info-circle"></i> Contact Mail:</div> 
+                <div class="column">{{ room.contactMail }}</div>
+            </div>
+            <div class="info-style">
+                <div class="column"><i class="bi bi-info-circle"></i> Contact Number:</div>
+                <div class="column">{{ room.contactNumber }}</div> 
+            </div>
+        </div>
+    </div>
+    <div nz-col nzSpan="12" >
+        <div class="column" *ngIf="(authService.isAuthenticated$ | async)">
+            <div style="background: #ECECEC;padding:10px; width: 390px;">
+                <nz-card style="width:370px;" [nzBordered]="false" nzTitle="Make Reservation">
+                <div class="date">
+                    <div class="note-stlye">Chose your date</div>
+                    <nz-range-picker [(ngModel)]="defaultDate" [nzDisabledDate]="disabledStartDate" ></nz-range-picker>
+                </div>
+                    <div class="text-box">
+                        <span class="note-stlye">Aditional note:</span>
+                        <textarea rows="2"  nz-input [(ngModel)]="inputValue"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-dark" style="float: right; margin-top: 10px;" (click)="makeReservation()" >Reserve</button>
+                </nz-card>
+            </div>
+       </div>
+
+       <div class="column" *ngIf="!(authService.isAuthenticated$ | async)">
+            <div class="error-msg">
+            <i class="fa fa-times-circle"></i>
+             To Reservate you need to be logged in.
+          </div>
+       </div>
+    </div>
+  </div>
+        
+
+

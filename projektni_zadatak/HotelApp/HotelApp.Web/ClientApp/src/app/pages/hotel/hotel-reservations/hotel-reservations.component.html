@@ -1,0 +1,57 @@
+<div class="text-style">Hotel Reservations</div>
+<div class="room-containter"> 
+    <div class="element">
+        <div class="form-text">Reservation Status</div>
+        <nz-select
+        nzMode="multiple"
+        nzPlaceHolder="Reservation status"
+        nzAllowClear
+        [(ngModel)] = "selectedStatuses"
+        (ngModelChange)="statusSelecotor($event)"
+        >
+        <nz-option *ngFor="let status of reservationStatuses$ | async" [nzLabel]="status.name" [nzValue]="status.id"></nz-option>
+        </nz-select>
+    </div>
+
+    <div class="element">
+        <div class="form-text">Sort:</div>
+        <nz-select nzAllowClear nzPlaceHolder="Sort" [(ngModel)]="selectedSort" (ngModelChange)="sortSelecotr($event)">
+            <nz-option nzLabel="Created at Ascending" nzValue="asc"></nz-option>
+            <nz-option nzLabel="Created at Descending" nzValue="desc"></nz-option>
+          </nz-select>
+    </div>
+</div> 
+
+<div class="room-table" *ngIf="reservations$ | async as reservations">
+    <nz-table [nzShowPagination]='false' nzTemplateMode>
+        <thead>
+            <tr>
+            <th>No.</th>
+            <th>Room</th>
+            <th>Created At</th>
+            <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of reservations.records  let i = index;">
+            <td><b>{{ i+1 }}.</b></td>
+            <td>{{data.roomName}}</td>
+            <td>{{convertDate(data.dateCreated)}}</td>
+            <td >{{ data.reservationStatus }}
+                <span *ngIf="data.reservationStatus === 'InProcess'" style="margin-left: 20vh;">
+                    <button type="button" class="btn btn-success" (click)="accept(data.id)">Accept</button>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <button type="button" class="btn btn-danger" (click)="reject(data.id)">Reject</button>
+                </span>
+            </td>    
+            </tr>
+        </tbody>
+        </nz-table>
+        <div class="pagination-decorator">
+            <nz-pagination [nzPageIndex]="reservations.currentPage" [nzTotal]="reservations.totalCount" [nzPageSize]="reservations.pageSize"
+            (nzPageIndexChange)="switchPage($event)">
+          </nz-pagination>
+        </div>
+</div>
+
+

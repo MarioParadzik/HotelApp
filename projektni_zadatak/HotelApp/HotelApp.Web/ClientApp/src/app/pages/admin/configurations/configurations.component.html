@@ -1,0 +1,29 @@
+<div class="text-style" >Configurations</div>
+<div class="reservation-table">
+    <button nz-button nzType="primary" nzDanger (click)="sync()">Sync Reservations</button>
+    <br />
+    <br />
+    <nz-table [nzData]="['']" [nzShowPagination]='false' nzBordered *ngIf="configuration$ | async as configurations">
+        <thead>
+          <tr>
+            <th nzWidth="30%">Name</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of configurations" class="editable-row">
+            <td>{{ data.key }}</td>
+            <td>
+                <nz-input-group  nzSearch [nzAddOnAfter]="suffixIconButton" style="border: 1px medium;" >
+                    <input [nzBorderless]="false" type="text" nz-input  (click)="startEdit(data.id)" [value]="data.value" #valueInput/>
+                  </nz-input-group>
+                  <ng-template #suffixIconButton  >
+                    <button style="padding: 0px;" *ngIf="editId === data.id"  nz-button nzType="primary" (click)="stopEdit(valueInput.value)"><i nz-icon nzType="check" nzTheme="outline"></i></button>
+                  </ng-template>
+            </td>
+            <td>{{ data.description }}</td>
+          </tr>
+        </tbody>
+    </nz-table>    
+</div>

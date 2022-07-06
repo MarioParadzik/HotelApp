@@ -1,0 +1,37 @@
+nz-select {
+    width: 30vh;
+}
+
+.room-containter {
+  display: inline-flex;
+  margin-top: 20px;
+}
+
+.element{
+  margin-left: 2vh;
+}
+
+.text-style{
+  font-size: 30px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin: 2vh;
+}
+
+.form-text{
+  font-size: 15px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-left: 5px;
+}
+nz-button-group {
+  margin: 0 8px 8px 0;
+}
+
+.room-table {
+  margin: 2vh;
+}
+
+.pagination-decorator{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}

@@ -1,0 +1,87 @@
+<form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+        <nz-form-label
+        [nzSm]="6"
+        [nzXs]="24"
+        nzFor="name"
+        nzRequired
+        >
+        <span>Hotel Name</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input hotel name!">
+          <input *ngIf="hotel !== null" nz-input id="name" formControlName="name" [(ngModel)]="hotel.name" />
+          <input *ngIf="hotel === null" nz-input id="name" formControlName="name" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="contactMail">Contact Mail</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+        <input *ngIf="hotel !== null" nz-input id="contactMail" formControlName="contactMail" [(ngModel)]="hotel.contactMail" />
+        <input *ngIf="hotel === null" nz-input id="contactMail" formControlName="contactMail"/>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="contactNumber" nzRequired>Contact Number</nz-form-label>
+      <nz-form-control
+        [nzSm]="14"
+        [nzXs]="24"
+        [nzValidateStatus]="validateForm.controls['contactNumber']"
+        nzErrorTip="Please input hotel contact number!"
+      >
+        <nz-input-group nzAddOnBefore="+385">
+          <input *ngIf="hotel !== null" nz-input id="contactNumber" formControlName="contactNumber" [(ngModel)]="hotel.contactNumber" />
+          <input *ngIf="hotel === null" nz-input id="contactNumber" formControlName="contactNumber"/>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    
+    <nz-form-item>
+        <nz-form-label
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="adress"
+          nzRequired
+        >
+          <span>Adress</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input hotel adress!">
+          <input *ngIf="hotel !== null" nz-input id="adress" formControlName="adress" [(ngModel)]="hotel.adress" />
+          <input *ngIf="hotel === null" nz-input id="adress" formControlName="adress"/>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="hotel === null">
+        <nz-form-label
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="locationId"
+          nzRequired
+        >
+          <span>Location</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input hotel location id!">
+          <nz-select nzPlaceHolder="Locations" nzAllowClear id="locationId" formControlName="locationId">
+            <nz-option *ngFor="let location of locations$ | async" [nzLabel]="location.name" [nzValue]="location.id"></nz-option>
+          </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="hotel !== null && hotel.hotelStatusId !== 1">
+      <nz-form-label [nzSm]="6" [nzXs]="24"  nzFor="hotelStatusId">Hotel Status</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please select hotel status!">
+        <nz-select id="hotelStatusId" formControlName="hotelStatusId" [(ngModel)]="hotel.hotelStatusId">
+          <nz-option [nzValue]="2" nzLabel="Active"></nz-option>
+          <nz-option [nzValue]="3" nzLabel="Inactive"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-row class="register-area">
+      <nz-form-control [nzSpan]="14" [nzOffset]="6">
+        <button nz-button class="btn btn-primary" (click)="submitForm()" *ngIf="hotel === null">Register</button>
+        <button nz-button class="btn btn-primary" (click)="submitForm()" *ngIf="hotel !== null">Update</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>

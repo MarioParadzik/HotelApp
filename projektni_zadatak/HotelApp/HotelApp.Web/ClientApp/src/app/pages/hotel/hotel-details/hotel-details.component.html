@@ -1,0 +1,50 @@
+<div class="text-style">Update Hotel</div>
+
+<div nz-row *ngIf="hotel$ | async as hotel">
+    <div nz-col nzSpan="8" ><app-hotel-form [hotelData]="hotel" (myValueSubmited)="updateHotel($event)"> </app-hotel-form></div>
+    <div nz-col nzSpan="16" *ngIf="rooms$ | async as rooms">
+        <button nz-button class="btn btn-primary" style="margin-left: 16px;" (click)="showModal()"><span>Add Room</span></button>
+        <nz-modal [(nzVisible)]="isVisible" nzTitle="Add Room" (nzOnCancel)="CancleAdd()" [nzFooter]="null">
+            <ng-container *nzModalContent>
+                <app-room-form  (myValueSubmited)="addRoom($event)"></app-room-form>
+            </ng-container>
+          </nz-modal>
+        <div nz-row >
+            <div *ngFor="let data of rooms.records">
+                <nz-card style="width: 300px;margin: 16px;" [nzActions]="[actionDelete, actionEdit]">
+                    <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
+                        <nz-card-meta
+                            [nzAvatar]="avatarTemplate"
+                            nzTitle="{{data.name}}"
+                            nzDescription="Price: {{data.price}} $"
+                        ></nz-card-meta>
+                    </nz-skeleton>
+
+                </nz-card>
+                <ng-template #avatarTemplate>
+                    <nz-avatar nzSrc="assets/Images/room.png"></nz-avatar>
+                </ng-template>
+                <ng-template #actionDelete>
+                    <a nz-popconfirm nzPopconfirmTitle="Are you sure you want to delete this room?" nzPopconfirmPlacement="bottom"
+                    nzOkText="Ok" nzCancelText="Cancel" (nzOnConfirm)="confirm(data.id)">
+                    <i nz-icon nzType="delete"></i></a>
+                </ng-template>
+                <ng-template #actionEdit>
+                <i nz-icon nzType="edit" (click)="showModalTop(data.id, tplTitle, tplContent)"></i>
+                </ng-template>
+            </div>
+            <ng-template #tplTitle>
+                <span>Edit Room {{roomName}}</span>
+            </ng-template>
+              <ng-template #tplContent let-params>
+                    <app-room-form [roomData]="room" (myValueSubmited)="updateRoom($event)"></app-room-form>
+            </ng-template>
+           
+        </div>
+        <div class="pagination-decorator">
+            <nz-pagination [nzPageIndex]="rooms.currentPage" [nzTotal]="rooms.totalCount" [nzPageSize]="rooms.pageSize"
+            (nzPageIndexChange)="switchPage($event)">
+            </nz-pagination>
+        </div>
+    </div>
+  </div>

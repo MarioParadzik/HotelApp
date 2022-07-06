@@ -1,0 +1,31 @@
+<div class="login-background">
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <img nz-image
+        width="300px"
+        height="170px"
+        src="assets/Images/HotelApp.png"
+        alt="HotelApp"
+        style="height: auto; width: 100%;"/>
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="err">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="email" placeholder="Email" />
+              <ng-template #err let-control>
+                <ng-container *ngIf="control.hasError('required')">Please input your E-mail!</ng-container>
+                <ng-container *ngIf="control.hasError('email')">The input is not valid E-mail!</ng-container>
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Password" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+        Or
+        <a [routerLink]="['../register']">register now!</a>
+    </form>
+</div>

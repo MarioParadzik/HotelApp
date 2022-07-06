@@ -1,0 +1,7 @@
+<nz-carousel [nzEffect]="strategy">
+    <div nz-carousel-content *ngFor="let index of myimages" style="max-height: 90vh;">
+        <img src="{{ index }}" style="width: 100%; height: auto;">
+        <div class="centered">WELCOME TO THE HOTEL APP</div>
+        <span><a [routerLink]="['/rooms']" class="button">Make reservation now</a></span>
+    </div>
+</nz-carousel>

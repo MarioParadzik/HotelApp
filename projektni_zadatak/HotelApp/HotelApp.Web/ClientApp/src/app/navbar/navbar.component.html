@@ -1,0 +1,25 @@
+<div class="header-container">
+    <nav class="navMenu">
+    <a [routerLink]="['../pages/home']">Hotel App</a>
+    <a *appInRole="['Super Administrator']" [routerLink]="['administrators']">Administrators</a>
+    <a *appInRole="['Super Administrator', 'Administrator']" [routerLink]="['hotels']">Hotels </a>
+    <a *appInRole="['Super Administrator']" [routerLink]="['configurations']">Configurations </a>
+    <a *appInRole="['Hotel Manager']" [routerLink]="['my-hotels']">My Hotels</a>
+    <a *appInRole="['Hotel Manager', 'Registered User', 'Anonymous']" (click)="showModal()">Register Hotel</a>
+    <a *appInRole="['Registered User', 'Anonymous']" [routerLink]="['rooms']">Rooms</a>
+    <a *appInRole="['Registered User']" [routerLink]="['reservations']"> My Reservations</a>
+    <a *appInRole="['Hotel Manager']" [routerLink]="['hotel/reservations']">Reservations</a>
+    <a *ngIf="!(authService.isAuthenticated$ | async)" style="float: right; margin-right: 15px; " (click)="login()">LogIn</a>
+    <a *ngIf="(authService.isAuthenticated$ | async)" [routerLink]="" (click)="authService.logout()" style="float: right; margin-right: 15px; " >Logout</a>
+    <div class="dot"></div>
+
+    <nz-modal [(nzVisible)]="isVisible" nzTitle="Warning" (nzOnCancel)="handleCancel()" [nzFooter]="null">
+        <ng-container *nzModalContent>
+            <p>To register a hotel you need to be logged in!</p>
+            <div style="margin-top: 2vh;">
+                <button nz-button nzType="primary" style="margin-right: 10px;" (click)="routeToLogin()">Login</button>
+                <button nz-button nzType="primary" (click)="routeToRegister()">Register</button>
+            </div>
+        </ng-container>   
+    </nz-modal>
+</nav></div>

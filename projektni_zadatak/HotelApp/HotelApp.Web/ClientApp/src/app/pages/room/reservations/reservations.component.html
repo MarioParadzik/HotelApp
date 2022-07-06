@@ -1,0 +1,49 @@
+<div class="text-style" >Reservations</div>
+<div class="reservation-table" *ngIf="reservations$ | async as reseservations">
+    <p *ngIf="reseservations?.length == 0">There are no reservations.</p>
+
+    <div>
+        <nz-table [nzShowPagination]='false' nzTemplateMode *ngIf="reseservations?.length != 0">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>Created At</th>
+                <th>Date From</th>
+                <th>Date To</th>
+                <th>Note</th>
+                <th>Room</th>
+                <th>Hotel</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of reseservations let i = index;">
+                <td><b>{{ i+1 }}.</b></td>
+                <td> {{convertDate(data.dateCreated)}} </td>
+                <td>{{ convertDate(data.dateFrom) }}</td>
+                <td>{{ convertDate(data.dateTo) }}</td>
+                <td *ngIf="data?.note != ''">{{ data.note }}</td>
+                <td *ngIf="data?.note == ''">-</td>
+                <td>{{ data.roomName }}</td>
+                <td>
+                    <div matTooltip="Cancelation date expired!" [matTooltipDisabled]="data.canCancel" >
+                        {{ data.hotelName }}
+                        <button style="margin-left: 20vh; margin-right: -20vh;" class="btn btn-danger"
+                        [disabled]="!data.canCancel"
+                        nz-popconfirm
+                        [nzIcon]="iconTpl"
+                        nzPopconfirmTitle="Are you sure?"
+                        nzOkText="ok"
+                        nzCancelText="cancel"
+                        (nzOnConfirm)="delete(data.id)"
+                        (nzOnCancel)="cancel()">Cancel</button>
+                    </div> 
+                </td>
+                <ng-template #iconTpl>
+                    <i nz-icon nzType="question-circle-o" style="color: red;"></i>
+                </ng-template>
+            </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
+
