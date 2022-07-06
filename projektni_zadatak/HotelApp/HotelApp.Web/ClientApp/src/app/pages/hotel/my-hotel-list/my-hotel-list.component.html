@@ -1,0 +1,21 @@
+<div class="text-style" *ngIf="userName !== null" >{{userName}}'s Hotels</div>
+
+<div class="reservation-table" *ngIf="hotelList$ | async as hotels">
+    <nz-list-empty *ngIf="hotels?.length == 0"></nz-list-empty>
+
+    <div *ngIf="hotels?.length != 0 ">
+        <nz-list  nzItemLayout="horizontal" nzSize="large">
+            <nz-list-item *ngFor="let hotel of hotels">
+              <nz-list-item-meta
+                nzAvatar="assets/Images/hotelManager.png"
+                nzDescription="Location: {{hotel.location}}, Adress: {{hotel.adress}}"
+              >
+                <nz-list-item-meta-title>
+                    <span nz-tooltip nzTooltipTitle="View details"><a class="link-primary" (click)="hotelDetails(hotel.id)" >{{ hotel.name }}</a></span> 
+                </nz-list-item-meta-title>
+              </nz-list-item-meta>
+            </nz-list-item>   
+        </nz-list>
+    </div>
+    
+</div>

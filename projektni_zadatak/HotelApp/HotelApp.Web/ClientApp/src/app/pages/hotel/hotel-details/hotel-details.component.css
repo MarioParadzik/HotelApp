@@ -1,0 +1,12 @@
+.text-style{
+    font-size: 30px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin: 2vh;
+  }
+
+  .pagination-decorator{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  

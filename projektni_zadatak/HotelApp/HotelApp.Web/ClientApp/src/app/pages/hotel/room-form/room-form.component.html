@@ -1,0 +1,44 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label
+        [nzSm]="6"
+        [nzXs]="24"
+        nzFor="name"
+        nzRequired
+        >
+        <span>Room Name</span>
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input room name!">
+        <input *ngIf="room !== null" nz-input id="name" formControlName="name" [(ngModel)]="room.name" />
+        <input *ngIf="room === null" nz-input id="name" formControlName="name" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="numberOfBeds">Beds</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="err">
+        <input *ngIf="room !== null" nz-input id="numberOfBeds" formControlName="numberOfBeds" [(ngModel)]="room.numberOfBeds" />
+        <input *ngIf="room === null" nz-input id="numberOfBeds" formControlName="numberOfBeds" />
+        <ng-template #err let-control>
+            <ng-container *ngIf="control.hasError('required')">Please input number of Beds!</ng-container>
+            <ng-container *ngIf="control.hasError('pattern') ">Numbers only allowed!</ng-container>
+        </ng-template>
+    </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="price">Price ($)</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="err2">
+        <input *ngIf="room !== null" nz-input id="price" formControlName="price" [(ngModel)]="room.price" />
+        <input *ngIf="room === null" nz-input id="price" formControlName="price" />
+        <ng-template #err2 let-control>
+            <ng-container *ngIf="control.hasError('required')">Please input number of Beds!</ng-container>
+            <ng-container *ngIf="control.hasError('pattern') ">Numbers only allowed!</ng-container>
+        </ng-template>
+        </nz-form-control>
+    </nz-form-item >
+    <nz-form-item nz-row class="register-area" >
+        <nz-form-control [nzSpan]="14" [nzOffset]="6">
+          <button nz-button class="btn btn-primary" *ngIf="room === null">Add</button>
+          <button nz-button class="btn btn-primary" *ngIf="room !== null">Update</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

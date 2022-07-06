@@ -1,0 +1,69 @@
+<div class="text-style">Reserve Room</div>
+<div class="room-containter"> 
+    <div class="element">
+        <div class="form-text">Number of beds</div>
+        <nz-select
+        nzMode="multiple"
+        nzPlaceHolder="Number of beds"
+        nzAllowClear
+        [(ngModel)] = "selectedBeds"
+        (ngModelChange)="bedSelecotor($event)"
+        >
+        <nz-option *ngFor="let bed of numberOfBeds$ | async" [nzLabel]="bed" [nzValue]="bed"></nz-option>
+        </nz-select>
+    </div>
+    <div class="element">
+        <div class="form-text">Location</div>
+        <nz-select
+        nzMode="multiple"
+        nzPlaceHolder="Locations"
+        nzAllowClear
+        [(ngModel)] = "selectedLocations"
+        (ngModelChange)="locationSelecotor($event)"
+        >
+        <nz-option *ngFor="let location of locations$ | async" [nzLabel]="location.name" [nzValue]="location.id"></nz-option>
+        </nz-select>
+    </div>
+    <div class="element">
+        <div class="form-text">Chose your date</div>
+        <nz-range-picker [(ngModel)]="date" [nzDisabledDate]="disabledStartDate" (nzOnCalendarChange)="dateSelecotor($event)" (ngModelChange)="onChange($event)"></nz-range-picker>
+
+    </div>
+
+    <div class="element">
+        <div class="form-text">Sort:</div>
+        <nz-select nzAllowClear nzPlaceHolder="Sort" [(ngModel)]="selectedSort" (ngModelChange)="sortSelecotr($event)">
+            <nz-option nzLabel="Price Ascending" nzValue="asc"></nz-option>
+            <nz-option nzLabel="Price Descending" nzValue="desc"></nz-option>
+          </nz-select>
+    </div>
+</div> 
+<div class="room-table" *ngIf="room$ | async as room">
+    <nz-table [nzShowPagination]='false' nzTemplateMode >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Number of beds</th>
+            <th>Price per night</th>
+            <th>Hotel</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of room.records">
+            <td>{{ data.name }}</td>
+            <td>{{ data.numberOfBeds }}</td>
+            <td>{{ data.price }} $</td>
+            <td>{{ data.hotelName }}</td>
+            <td >{{ data.locationName }}  <a style="margin-left: 20vh; margin-right: -20vh;" class="btn btn-danger" (click)="RoomDetails(data.id)">View Details</a></td>
+
+          </tr>
+        </tbody>
+    </nz-table>
+    <div class="pagination-decorator">
+      <nz-pagination [nzPageIndex]="room.currentPage" [nzTotal]="room.totalCount" [nzPageSize]="room.pageSize"
+      (nzPageIndexChange)="switchPage($event)">
+    </nz-pagination>
+    </div>
+
+</div>

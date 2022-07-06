@@ -1,0 +1,32 @@
+nz-radio-group {
+    margin-bottom: 8px;
+}
+
+[nz-carousel-content] {
+    overflow: hidden;
+}
+.centered {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.1rem;
+    font-family: 'georgia';
+    font-weight: bold;
+    color: #787878;
+  }
+
+.button {
+color: white;
+background-color: black;
+position: absolute;
+top: 15%;
+left: 50%;
+transform: translate(-50%, -50%);
+transition: transform .5s;
+font-family: 'Montserrat', sans-serif;
+border: 5px solid black;
+box-sizing: border-box;
+border-radius: 6px;
+}
+
