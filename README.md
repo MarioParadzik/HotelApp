@@ -11,7 +11,7 @@ Preview https://hp-weu-hotelappweb-dev-01.azurewebsites.net/
 * Logging using Serilog package
 * Added a global exception handler, soft delete, paging, integration with an external system...
 
-# Use cases
+## Use cases
 * Registration
 * Login
 * Hotel registration and editing info
